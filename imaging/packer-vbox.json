@@ -97,9 +97,29 @@
       "type": "powershell",
       "scripts": [
         "./scripts/bootstrapper.ps1",
-        "./scripts/virtualbox-guest-tools.ps1",
-        "./scripts/provision-choco.ps1",
-        "./scripts/provision-boxstarter.ps1"
+        "./scripts/virtualbox-guest-tools.ps1"
+      ],
+      "only":["raw"]
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "md c:\\tmp\\boxstarter"
+      ],
+      "only":["baked"]
+    },
+    { 
+      "type": "file",
+      "source": "./scripts/boxstarter.ps1",
+      "destination": "c:\\tmp\\boxstarter\\boxstarter.ps1",
+      "only": ["raw"]
+    },
+    {
+      "type": "powershell",
+      "script": "./scripts/bootstrap-boxstarter.ps1",
+      "environment_vars": [
+        "BUILD_USER={{user `build_username`}}",
+        "BUILD_USER_PASSWORD={{user `build_password`}}"
       ],
       "only":["raw"]
     },

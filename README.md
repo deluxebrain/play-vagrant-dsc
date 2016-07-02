@@ -10,6 +10,10 @@ Playing around with provisioning Windows servers using Packer, Vagrant and the v
   - [vagrant-dsc](https://github.com/mefellows/vagrant-dsc)
   - winrm-fs
 
+## Sample appplication
+
+The sample application is called ```vagrant-dsc-demo``` - all release artefacts and machine configuration (DSC) can be found in the ```./packaging``` directory.
+
 ## Packer
 
 The packer template can be found in the ```imaging``` directory ( ```packer-vbox.json ```).
@@ -42,8 +46,15 @@ Each build target builds provisions an associated vagrant box:
 2. ```baked```
   This is the baked application image created by packer. Included purely FYO and to allow the convenient comparison of packer-dsc vs vagrant-dsc provisioned servers.
 
-## Sample appplication
+The Vagrantfile expects to find a vm named ```vagrant-dsc-demo```. For example, this could be created as follows:
 
-The sample application release artefacts and machine configuration (DSC) can be found in the ```./packaging``` directory.
+```script
+vagrant box add vagrant-dsc-demo <path to box file>
+```
 
+Vagrant can be made to re-provision the box image against any changes to the dsc as follows:
+
+```script
+vagrant provision --provision-with dsc
+```
 

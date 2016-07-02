@@ -16,7 +16,7 @@ if ($result.Errors.Length -gt 0)
 }
 
 Write-Output "Running in Boxstarter packages"
-$result = Install-BoxstarterPackage -Verbose -PackageName c:\\tmp\\boxstarter\\boxstarter.ps1 # -DisableReboots
+$result = Install-BoxstarterPackage -Verbose -DisableReboots -PackageName c:\\tmp\\boxstarter\\boxstarter.ps1
 if ($result.Errors.Length -gt 0)
 {
   Write-Error $result.Errors[0]
