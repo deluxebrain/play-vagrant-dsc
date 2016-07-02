@@ -21,7 +21,7 @@
       "iso_checksum": "{{user `iso_checksum`}}",
       "winrm_username": "{{user `build_username`}}",
       "winrm_password": "{{user `build_password`}}",
-      "winrm_timeout": "10m",
+      "winrm_timeout": "5h",
       "winrm_port":5985,
       "headless": false,
       "boot_wait": "1m",
@@ -32,7 +32,8 @@
       "floppy_files": [
         "./answer_files/2012_r2/Autounattend.xml",
         "./scripts/oracle-cert.cer",
-        "./scripts/disable-password-complexity.ps1"
+        "./scripts/bootstrap-boxstarter.ps1", 
+        "./scripts/boxstarter.ps1" 
       ],
       "vboxmanage": [
         [
@@ -96,53 +97,7 @@
     {
       "type": "powershell",
       "scripts": [
-        "./scripts/bootstrapper.ps1",
         "./scripts/virtualbox-guest-tools.ps1"
-      ],
-      "only":["raw"]
-    },
-    {
-      "type": "powershell",
-      "inline": [
-        "md c:\\tmp\\boxstarter"
-      ],
-      "only":["baked"]
-    },
-    { 
-      "type": "file",
-      "source": "./scripts/boxstarter.ps1",
-      "destination": "c:\\tmp\\boxstarter\\boxstarter.ps1",
-      "only": ["raw"]
-    },
-    {
-      "type": "powershell",
-      "script": "./scripts/bootstrap-boxstarter.ps1",
-      "environment_vars": [
-        "BUILD_USER={{user `build_username`}}",
-        "BUILD_USER_PASSWORD={{user `build_password`}}"
-      ],
-      "only":["raw"]
-    },
-    {
-      "type": "windows-restart",
-      "only":["raw"]
-    },
-    {
-      "type": "powershell",
-      "scripts": [
-        "./scripts/cleanup_step1.ps1"
-      ],
-      "only":["raw"]
-    },
-    {
-      "type": "windows-restart",
-      "only":["raw"]
-    },
-    {
-      "type": "powershell",
-      "pause_before":"2m",
-      "scripts": [
-        "./scripts/cleanup_step2.ps1"
       ],
       "only":["raw"]
     },
