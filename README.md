@@ -19,7 +19,7 @@ The sample application is called ```vagrant-dsc-demo``` - all release artefacts 
 The packer template can be found in the ```imaging``` directory ( ```packer-vbox.json ```).
 This defines the build chain for building out the ```vagrant-dsc-demo``` sample application. This is made up for the following build definitions for two Windows Server 2012 r2 virtualbox images:
 
-1. ```raw```
+1. raw
   
   Builds out a base Windows Server 2012 r2 build as the first step in chained application build.
   The sample application is then baked from this image in one of two ways:
@@ -29,7 +29,7 @@ This defines the build chain for building out the ```vagrant-dsc-demo``` sample 
 
   By default, builds out to ```/var/media/images/vbox/vagrant-dsc-demo-1.0.0/raw/```.
   
-2. ```baked```
+2. baked
   
   Builds out the sample application using the ```raw``` image created as the first part of the build chain.
   Uses ```packer-dsc``` packer plugin to deploy and configure the sample application, including installation of the DSC Powershell modules required by the application DSC configuration and associated resources.
@@ -42,11 +42,11 @@ Note all virtualbox and vagrant images are defaulted to build out to ```/var/med
 
 Each build target builds provisions an associated vagrant box:
 
-1. ```raw```
+1. raw
   
   This is the base image that is used by vagrant to provision the sample app ( via the vagrant-dsc plugin ).
 
-2. ```baked```
+2. baked
   
   This is the baked application image created by packer. Included purely FYO and to allow the convenient comparison of packer-dsc vs vagrant-dsc provisioned servers.
 
