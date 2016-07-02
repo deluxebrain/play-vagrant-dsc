@@ -1,0 +1,182 @@
+{
+  "variables": {
+    "images_directory": "/var/media/images/",
+    "app_name": "vagrant-dsc-demo",
+    "build_version": "1.0.0",
+    "iso_url": "http://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.16384.WINBLUE_RTM.130821-1623_X64FRE_SERVER_EVAL_EN-US-IRM_SSS_X64FREE_EN-US_DV5.ISO",
+    "iso_checksum_type": "md5",
+    "iso_checksum": "458ff91f8abc21b75cb544744bf92e6a",
+    "build_username": "vagrant",
+    "build_password": "FooBarBaz"
+  },
+  "builders": [
+    {
+      "name": "raw",
+      "type": "virtualbox-iso",
+      "communicator": "winrm",
+      "vm_name": "{{user `app_name`}}-{{user `build_version`}}",
+      "output_directory": "{{user `images_directory`}}vbox/{{user `app_name`}}-{{user `build_version`}}/raw/",
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "winrm_username": "{{user `build_username`}}",
+      "winrm_password": "{{user `build_password`}}",
+      "winrm_timeout": "10m",
+      "winrm_port":5985,
+      "headless": false,
+      "boot_wait": "1m",
+      "guest_additions_mode": "disable",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "guest_os_type": "Windows2012_64",
+      "disk_size": 61440,
+      "floppy_files": [
+        "./answer_files/2012_r2/Autounattend.xml",
+        "./scripts/oracle-cert.cer",
+        "./scripts/disable-password-complexity.ps1"
+      ],
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "2048"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--natpf1",
+          "guestwinrm,tcp,127.0.0.1,5985,,5985"
+        ]
+      ]
+    },
+    {
+      "name": "baked",
+      "type": "virtualbox-ovf",
+      "communicator": "winrm",
+      "vm_name": "{{user `app_name`}}-{{user `build_version`}}",
+      "output_directory": "{{user `images_directory`}}vbox/{{user `app_name`}}-{{user `build_version`}}/baked/",
+      "source_path": "{{user `images_directory`}}vbox/{{user `app_name`}}-{{user `build_version`}}/raw/{{user `app_name`}}-{{user `build_version`}}.ovf",
+      "winrm_username": "{{user `build_username`}}",
+      "winrm_password": "{{user `build_password`}}",
+      "winrm_timeout": "10m",
+      "winrm_port":5985,
+      "headless": false,
+      "boot_wait": "1m",
+      "guest_additions_mode": "disable",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "2048"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--natpf1",
+          "guestwinrm,tcp,127.0.0.1,5985,,5985"
+        ]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "scripts": [
+        "./scripts/bootstrapper.ps1",
+        "./scripts/virtualbox-guest-tools.ps1",
+        "./scripts/provision-choco.ps1",
+        "./scripts/provision-boxstarter.ps1"
+      ],
+      "only":["raw"]
+    },
+    {
+      "type": "windows-restart",
+      "only":["raw"]
+    },
+    {
+      "type": "powershell",
+      "scripts": [
+        "./scripts/cleanup_step1.ps1"
+      ],
+      "only":["raw"]
+    },
+    {
+      "type": "windows-restart",
+      "only":["raw"]
+    },
+    {
+      "type": "powershell",
+      "pause_before":"2m",
+      "scripts": [
+        "./scripts/cleanup_step2.ps1"
+      ],
+      "only":["raw"]
+    },
+    {
+      "type":"powershell",
+      "inline": [
+        "md c:\\tmp\\deploy\\app",
+        "md c:\\tmp\\deploy\\ops",
+        "md c:\\tmp\\dsc\\staging",
+        "md c:\\tmp\\dsc\\working"
+      ],
+      "only":["baked"]
+    },
+    {
+      "type": "file",
+      "source": "../packaging/MyApp/artefacts",
+      "destination": "c:\\tmp\\deploy\\app",
+      "only":["baked"]
+    },
+    {
+      "type": "dsc",
+      "configuration_name": "MyApp",
+      "configuration_file": "../packaging/MyApp/dsc/manifests/MyAppConfig.psd1",
+      "manifest_file": "../MyProject/dsc/manifests/MyWebsite.ps1",
+      "working_dir": "c:\\tmp\\dsc\\working",
+      "staging_dir": "c:\\tmp\\dsc\\staging",
+      "install_package_management": true,
+      "install_modules": {
+        "xWebAdministration": "1.11.0.0",
+        "xNetworking": "2.9.0.0"
+      },
+      "configuration_params": {
+        "-MachineName": "localhost",
+        "-SourcePath": "c:\\tmp\\deploy\\app\\MySite"
+      },
+      "only":["baked"]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "compression_level":1,
+      "keep_input_artifact": true,
+      "output": "{{user `images_directory`}}vagrant/{{user `app_name`}}-{{user `build_version`}}/raw.box",
+      "vagrantfile_template": "vagrantfile-windows_2012_r2.template",
+      "only": ["raw"]
+    },
+    {
+      "type": "vagrant",
+      "compression_level":1,
+      "keep_input_artifact": true,
+      "output": "{{user `images_directory`}}vagrant/{{user `app_name`}}-{{user `build_version`}}/baked.box",
+      "vagrantfile_template": "vagrantfile-windows_2012_r2.template",
+      "only": ["raw"]
+    }
+  ]
+}
