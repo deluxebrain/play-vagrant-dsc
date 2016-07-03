@@ -52,13 +52,25 @@ Each build target builds provisions an associated vagrant box:
 
 The Vagrantfile expects to find a vm named ```vagrant-dsc-demo```. For example, this could be created as follows:
 
-```script
+```shell
 vagrant box add vagrant-dsc-demo <path to box file>
 ```
 
 Vagrant can be made to re-provision the box image against any changes to the dsc as follows:
 
-```script
+```shell
 vagrant provision --provision-with dsc
 ```
+
+### Troubleshooting
+
+1. Failures during ```vagrant up```
+
+  Sometimes its worth getting out and kicking the tyres:
+
+  ```shell
+  vagrant up 
+  vagrant reload
+  vagrant provision --debug --provision-with dsc
+  ```
 

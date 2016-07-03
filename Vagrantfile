@@ -10,7 +10,7 @@ WINRM_HOST_PORT = 5895
 WINRM_PASSWORD = "FooBarBaz"
 
 # Absolute paths for directories on the guest
-GUEST_SOURCE_DIR = PROJ_DIR + "c:\\tmp\\deploy\\MyApp\\artefacts\\MySite"
+GUEST_SOURCE_DIR = "c:\\tmp\\deploy\\MyApp\\artefacts\\MySite"
 
 # Relative paths for directories relating to DSC configuration
 # Paths are relative to the VagrantFile containing directory
@@ -54,21 +54,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Copy over the files for packaging
   config.vm.synced_folder './packaging', 
-    "c:/tmp/deploy",
-    owner: "vagrant",
-    rsync__auto: "true",
-    rsync__exclude: [".git/","*.box", "output-*"]
+     "c:/tmp/deploy",
+  owner: "vagrant"
 
   # Run DSC
   config.vm.provision "dsc" do |dsc|
   
     # Temp working folder on the guest machine
-    dsc.temp_dir = "c:/tmp/dsc"
+    dsc.temp_dir = "c:\\tmp\\dsc"
 
     # Type of synced folders to use
     # E.g. "nfs" to use NFS synced folders
     # Defaults to VirtualBox
-    dsc.synced_folder_type = "VirtualBox"
+    # dsc.synced_folder_type = "VirtualBox"
 
     #
     # Paths are relative to the Vagrantfile directory
@@ -99,7 +97,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Commandline arguments for the configuration command
     dsc.configuration_params = {
       "-MachineName" => "localhost",
-      "-SourcePath" => "#{APP_SOURCE_DIR}",
+      "-SourcePath" => "#{GUEST_SOURCE_DIR}",
       "-HostName" => "#{HOSTNAME}"
     }
   end
