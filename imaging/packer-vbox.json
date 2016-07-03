@@ -21,7 +21,7 @@
       "iso_checksum": "{{user `iso_checksum`}}",
       "winrm_username": "{{user `build_username`}}",
       "winrm_password": "{{user `build_password`}}",
-      "winrm_timeout": "5h",
+      "winrm_timeout": "12h",
       "winrm_port":5985,
       "headless": false,
       "boot_wait": "1m",
@@ -40,7 +40,7 @@
           "modifyvm",
           "{{.Name}}",
           "--memory",
-          "2048"
+          "4096"
         ],
         [
           "modifyvm",
@@ -76,19 +76,13 @@
           "modifyvm",
           "{{.Name}}",
           "--memory",
-          "2048"
+          "4096"
         ],
         [
           "modifyvm",
           "{{.Name}}",
           "--cpus",
           "2"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--natpf1",
-          "guestwinrm,tcp,127.0.0.1,5985,,5985"
         ]
       ]
     }
@@ -121,7 +115,10 @@
       "type": "dsc",
       "configuration_name": "MyApp",
       "configuration_file": "../packaging/MyApp/dsc/manifests/MyAppConfig.psd1",
-      "manifest_file": "../MyProject/dsc/manifests/MyWebsite.ps1",
+      "manifest_file": "../packaging/MyApp/dsc/manifests/MyApp.ps1",
+      "module_paths": [
+        "../packaging/MyApp/dsc/modules"
+      ],
       "working_dir": "c:\\tmp\\dsc\\working",
       "staging_dir": "c:\\tmp\\dsc\\staging",
       "install_package_management": true,
@@ -151,7 +148,7 @@
       "keep_input_artifact": true,
       "output": "{{user `images_directory`}}vagrant/{{user `app_name`}}-{{user `build_version`}}/baked.box",
       "vagrantfile_template": "vagrantfile-windows_2012_r2.template",
-      "only": ["raw"]
+      "only": ["baked"]
     }
   ]
 }

@@ -8,49 +8,49 @@ Configuration MyApp
     [string]$SourcePath
   )
 
-  Import-DscResource -ModuleName 'PSDesiredStateConfiguration'
-  Import-DscResource -Module 'MyProjectApp'
-  Import-DscResource -Module 'xWebAdministration'
-  Import-DscResource -Module 'xNetworking'
+  Import-DscResource -Module PSDesiredStateConfiguration
+  Import-DscResource -Module MyAppResources
+  Import-DscResource -Module xWebAdministration
+  Import-DscResource -Module xNetworking
 
   Write-Host "MyApp DSC Config :: MachineName=$MachineName"
   
   Node $MachineName
   {
-      WindowsFeature IIS
-      {
-        Ensure = "Present"
-        Name = "Web-Server"
-      }
+    WindowsFeature IIS
+    {
+      Ensure = "Present"
+      Name = "Web-Server"
+    }
 
-      WindowsFeature IISManagerFeature
-      {
-        Ensure = "Present"
-        Name = "Web-Mgmt-Tools"
-      }
+    WindowsFeature IISManagerFeature
+    {
+      Ensure = "Present"
+      Name = "Web-Mgmt-Tools"
+    }
 
-      xFirewall webFirewall
-      {
-        Ensure = "Present"
-        Name = "WebFirewallOpen"
-        Direction = "Inbound"
-        LocalPort = "80"
-        Protocol = "TCP"
-        Action = "Allow"
-      }
+    xFirewall webFirewall
+    {
+      Ensure = "Present"
+      Name = "WebFirewallOpen"
+      Direction = "Inbound"
+      LocalPort = "80"
+      Protocol = "TCP"
+      Action = "Allow"
+    }
+    
+    xWebsite DefaultSite
+    {
+      Ensure = "Absent"
+      Name = "Default Web Site"
+      State = "Stopped"
+      PhysicalPath = "c:\inetput\wwwroot"
+    }
 
-      xWebsite DefaultSite
-      {
-        Ensure = "Absent"
-        Name = "Default Web Site"
-        State = "Stopped"
-        PhysicalPath = "c:\inetput\wwwroot"
-      }
-
-      MySite sWebsite
-      {
-        MachineName = $MachineName
-        SourcePath = $SourcePath
-      }
+    MySite sWebsite
+    {
+      MachineName = $MachineName
+      SourcePath = $SourcePath
+    }
   }
 }

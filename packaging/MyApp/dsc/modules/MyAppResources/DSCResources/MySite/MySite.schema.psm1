@@ -13,7 +13,7 @@ Configuration MySite
     [string]$HostName = "MySite.example.${HostNameSuffix}"
   )
 
-  Import-DscResource -ModuleName 'PSDesiredStateConfiguration'
+  Import-DscResource -Module 'PSDesiredStateConfiguration'
   Import-DscResource -Module 'xWebAdministration'
   Import-DscResource -Module 'xNetworking'
 
