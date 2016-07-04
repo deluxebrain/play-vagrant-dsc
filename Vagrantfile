@@ -53,9 +53,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Copy over the files for packaging
-  config.vm.synced_folder './packaging', 
-     "c:/tmp/deploy",
-  owner: "vagrant"
+  config.vm.synced_folder 'packaging/', 
+     "c:\\tmp\\deploy",
+    owner: "vagrant",
+    create: true
 
   # Run DSC
   config.vm.provision "dsc" do |dsc|
