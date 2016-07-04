@@ -21,7 +21,7 @@
       "iso_checksum": "{{user `iso_checksum`}}",
       "winrm_username": "{{user `build_username`}}",
       "winrm_password": "{{user `build_password`}}",
-      "winrm_timeout": "12h",
+      "winrm_timeout": "24h",
       "winrm_port":5985,
       "headless": false,
       "boot_wait": "1m",

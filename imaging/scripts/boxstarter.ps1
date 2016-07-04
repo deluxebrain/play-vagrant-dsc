@@ -8,7 +8,7 @@ Enable-RemoteDesktop
 Set-NetFirewallRule -Name RemoteDesktop-UserMode-In-TCP -Enabled True
 
 Write-BoxstarterMessage "Installing critical Windows updates"
-# Install-WindowsUpdate -AcceptEula
+Install-WindowsUpdate -AcceptEula
 if(Test-PendingReboot){ Invoke-Reboot }
 
 # Remove the page file - saving a load of space in the packer image
