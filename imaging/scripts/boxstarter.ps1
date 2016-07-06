@@ -24,7 +24,7 @@ Disable-InternetExplorerESC
 Disable-BingSearch
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowProtectedOSFiles -EnableShowFileExtensions -EnableShowFullPathInTitleBar -EnableOpenFileExplorerToQuickAccess -EnableShowRecentFilesInQuickAccess -EnableShowFrequentFoldersInQuickAccess -EnableExpandToOpenFolder
 
-Write-BoxstarterMessage "Installing Powershell and WMI"
+Write-BoxstarterMessage "Installing Powershell and WMF"
 choco install powershell -y
 
 Write-BoxstarterMessage "Installing tooling"
