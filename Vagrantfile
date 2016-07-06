@@ -14,9 +14,9 @@ GUEST_SOURCE_DIR = "c:\\tmp\\deploy\\MyApp\\artefacts\\MySite"
 
 # Relative paths for directories relating to DSC configuration
 # Paths are relative to the VagrantFile containing directory
-DSC_MODULES_DIR = "./packaging/MyApp/dsc/modules/"
-DSC_MANIFESTS_DIR = "./packaging/MyApp/dsc/manifests/"
-DSC_MOF_DIR = "./packaging/MyApp/dsc/mof/"
+DSC_MODULES_DIR = "packaging/MyApp/dsc/modules/"
+DSC_MANIFESTS_DIR = "packaging/MyApp/dsc/manifests/"
+DSC_MOF_DIR = "packaging/MyApp/dsc/mof/"
 
 # Host setup
 HOSTNAME = "MyAppServer"
@@ -54,9 +54,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Copy over the files for packaging
   config.vm.synced_folder 'packaging/', 
-     "c:\\tmp\\deploy",
-    owner: "vagrant",
-    create: true
+    "c:\\tmp\\deploy",
+    type: "rsync"
 
   # Run DSC
   config.vm.provision "dsc" do |dsc|
@@ -67,7 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Type of synced folders to use
     # E.g. "nfs" to use NFS synced folders
     # Defaults to VirtualBox
-    # dsc.synced_folder_type = "VirtualBox"
+    dsc.synced_folder_type = "rsync"
 
     #
     # Paths are relative to the Vagrantfile directory
