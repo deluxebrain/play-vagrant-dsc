@@ -1,4 +1,5 @@
 # play-vagrant-dsc
+
 Playing around with provisioning Windows servers using Packer, Vagrant and the vagrant-dsc plugin
 
 ## Prerequisities
@@ -48,9 +49,9 @@ Each build target builds provisions an associated vagrant box:
 
 2. baked
   
-  This is the baked application image created by packer. Included purely FYO and to allow the convenient comparison of packer-dsc vs vagrant-dsc provisioned servers.
+  This is the baked application image created by packer. Included purely FYI and to allow the convenient comparison of packer-dsc vs vagrant-dsc provisioned servers.
 
-The Vagrantfile expects to find a vm named ```vagrant-dsc-demo```. For example, this could be created as follows:
+The Vagrantfile expects to find a box named ```vagrant-dsc-demo```. For example, this could be created as follows:
 
 ```shell
 vagrant box add vagrant-dsc-demo <path to box file>
