@@ -147,7 +147,7 @@
     {
       "type": "powershell",
       "inline": [
-        "bash \"c:\\tmp\\cygwin-packages.sh\""
+        "c:\\tools\\cygwin\\bin\\bash.exe \"c:\\tmp\\cygwin-packages.sh\""
       ],
       "only": ["raw2"]
     },
