@@ -1,7 +1,10 @@
-#!/bin/bash
+#!/bin/sh
+
+echo "Provisioning cygwin packages"
 
 # apt-cyg
-wget rawgit.com/transcode-open/apt-cyg/master/apt-cyg
+echo "Installing apt-cyg"
+lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
 install apt-cyg /bin
 
 # apt-cyg packages
