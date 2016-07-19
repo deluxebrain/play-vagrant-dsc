@@ -55,7 +55,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Copy over the files for packaging
   config.vm.synced_folder 'packaging/', 
     "c:\\tmp\\deploy",
-    type: "rsync"
+    type: "rsync",
+    rsync__auto: "true"
 
   # Run DSC
   config.vm.provision "dsc" do |dsc|
