@@ -63,7 +63,7 @@ Vagrant can be made to re-provision the box image against any changes to the dsc
 vagrant provision --provision-with dsc
 ```
 
-### Troubleshooting
+## Troubleshooting
 
 1. Failures during ```vagrant up```
 
