@@ -11,11 +11,11 @@ Playing around with provisioning Windows servers using Packer, Vagrant and the v
   - [vagrant-dsc](https://github.com/mefellows/vagrant-dsc)
   - winrm-fs
 
-## Sample appplication
+## The build
 
 The sample application is called ```vagrant-dsc-demo``` - all release artefacts and machine configuration (DSC) can be found in the ```./packaging``` directory.
 
-## Packer
+### Packer
 
 The packer template can be found in the ```imaging``` directory ( ```packer-vbox.json ```).
 This defines the build chain for building out the ```vagrant-dsc-demo``` sample application. This is made up for the following build definitions for two Windows Server 2012 r2 virtualbox images:
@@ -39,7 +39,7 @@ This defines the build chain for building out the ```vagrant-dsc-demo``` sample 
 
 Note all virtualbox and vagrant images are defaulted to build out to ```/var/media/images```. This can be changed using the packer user variable ```images-directory```.
 
-## Vagrant
+### Vagrant
 
 Each build target builds provisions an associated vagrant box:
 
@@ -62,6 +62,8 @@ Vagrant can be made to re-provision the box image against any changes to the dsc
 ```shell
 vagrant provision --provision-with dsc
 ```
+
+### Vagrant commmunication between host and guest
 
 ## Troubleshooting
 
