@@ -16,9 +16,13 @@ mkgroup -l > /etc/group
 ssh-host-config --yes \
         -w "FooBarBaz"
 
-
-
 # Setup ssh directory permissions
 chmod 700 /home/Vagrant/.ssh        # drwx------
 chmod 600 /home/Vagrant/*           # -rw-r--r--
 chmod 644 /home/Vagrant/.ssh/*.pub  # -rw-------
+
+# Configure Windows firewall
+
+
+# Start the sshd service
+cygrunsrv --start sshd

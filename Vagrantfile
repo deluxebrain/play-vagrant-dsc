@@ -14,9 +14,9 @@ GUEST_SOURCE_DIR = "c:\\tmp\\deploy\\MyApp\\artefacts\\MySite"
 
 # Relative paths for directories relating to DSC configuration
 # Paths are relative to the VagrantFile containing directory
-DSC_MODULES_DIR = "packaging/MyApp/dsc/modules/"
+DSC_MODULES_DIR   = "packaging/MyApp/dsc/modules/"
 DSC_MANIFESTS_DIR = "packaging/MyApp/dsc/manifests/"
-DSC_MOF_DIR = "packaging/MyApp/dsc/mof/"
+DSC_MOF_DIR       = "packaging/MyApp/dsc/mof/"
 
 # Host setup
 HOSTNAME = "MyAppServer"
@@ -35,16 +35,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = HOSTNAME
 
   # Configure port forwarding 
-  config.vm.network :forwarded_port,   guest: 3389, host: 3399,       id: "rdp",   auto_correct: false
-  config.vm.network :forwarded_port,   guest: 5985, host: WINRM_HOST_PORT,  id: "winrm", auto_correct: false
-  config.vm.network :forwarded_port,   guest: 80,   host: 8000,       id: "web" # Port forward for IIS
-  config.vm.network :forwarded_port,   guest: 443,  host: 8443,       id: "ssl" # Port forward for SSL IIS
-  config.vm.network :forwarded_port,   guest: 4018, host: 4018,       id: "remotevsdebug"
+  config.vm.network :forwarded_port,  guest: 22,    host: 2222,             id: "ssh",
+  config.vm.network :forwarded_port,  guest: 3389,  host: 3399,             id: "rdp",           auto_correct: false
+  config.vm.network :forwarded_port,  guest: 5985,  host: WINRM_HOST_PORT,  id: "winrm",         auto_correct: false
+  config.vm.network :forwarded_port,  guest: 80,    host: 8000,             id: "web"
+  config.vm.network :forwarded_port,  guest: 443,   host: 8443,             id: "ssl"
+  config.vm.network :forwarded_port,  guest: 4018,  host: 4018,             id: "remotevsdebug"
 
   # Configure winrm
-  config.winrm.host = "localhost"
-  config.winrm.password = WINRM_PASSWORD
-  config.winrm.port = WINRM_HOST_PORT
+  config.winrm.host       = "localhost"
+  config.winrm.password   = WINRM_PASSWORD
+  config.winrm.port       = WINRM_HOST_PORT
   config.winrm.guest_port = WINRM_HOST_PORT
 
   # GUI or headless
@@ -97,9 +98,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
     # Commandline arguments for the configuration command
     dsc.configuration_params = {
-      "-MachineName" => "localhost",
-      "-SourcePath" => "#{GUEST_SOURCE_DIR}",
-      "-HostName" => "#{HOSTNAME}"
+      "-MachineName"         => "localhost",
+      "-SourcePath"          => "#{GUEST_SOURCE_DIR}",
+      "-HostName"            => "#{HOSTNAME}"
     }
   end
 end
