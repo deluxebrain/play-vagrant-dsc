@@ -71,6 +71,10 @@
       "boot_wait": "1m",
       "guest_additions_mode": "disable",
       "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "floppy_files": [
+        "./scripts/cygwin-setup.sh",
+        "./scripts/ssh-setup.ssh"
+      ],
       "vboxmanage": [
         [
           "modifyvm",
@@ -119,12 +123,6 @@
   ],
   "provisioners": [
     {
-      "type":"powershell",
-      "inline": [
-        "md c:\\tmp"
-      ]
-    },
-    {
       "type": "powershell",
       "scripts": [
         "./scripts/virtualbox-guest-tools.ps1"
@@ -139,15 +137,10 @@
       "only": ["raw2"]
     },
     {
-      "type": "file",
-      "source": "./scripts/cygwin-packages.sh",
-      "destination": "c:\\tmp\\cygwin-packages.sh",
-      "only":["raw2"]
-    },
-    {
       "type": "powershell",
       "inline": [
-        "c:\\tools\\cygwin\\bin\\bash.exe --login \"c:\\tmp\\cygwin-packages.sh\""
+        "c:\\tools\\cygwin\\bin\\bash.exe --login \"a:\\cygwin-setup.sh\"",
+        "c:\\tools\\cygwin\\bin\\bash.exe --login \"a:\\ssh-setup.sh\""
       ],
       "only": ["raw2"]
     },
@@ -187,6 +180,13 @@
         "-SourcePath": "c:\\tmp\\deploy\\app\\MySite"
       },
       "only":["baked"]
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "Remove-Item c:\\tmp -Force -Recurse"
+      ],
+      "only": ["baked"]
     }
   ],
   "post-processors": [

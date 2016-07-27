@@ -11,4 +11,4 @@ $cred = New-Object System.Management.Automation.PSCredential ("vagrant", $secpas
 
 # Install boxstarter packages
 Import-Module $env:appdata\boxstarter\boxstarter.chocolatey\boxstarter.chocolatey.psd1
-Install-BoxstarterPackage -PackageName a:\boxstarter.ps1 -Credential $cred
+Install-BoxstarterPackage -PackageName a:\boxstarter-setup.ps1 -Credential $cred
