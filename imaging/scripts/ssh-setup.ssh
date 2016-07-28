@@ -11,10 +11,14 @@ mkpasswd -l > /etc/passwd
 # 2. Create a local /etc/group file
 mkgroup -l > /etc/group
 
-# Setup sshd
+# Setup sshd host config
+# Note --yes runs the install headless using defaults
 # https://cygwin.com/ml/cygwin/2004-11/msg01117/ssh-host-config
 ssh-host-config --yes \
         -w "FooBarBaz"
+
+# Override sshd defaults as required:
+# TODO
 
 # Setup ssh directory permissions
 chmod 700 /home/Vagrant/.ssh        # drwx------
