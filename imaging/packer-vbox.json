@@ -73,7 +73,7 @@
       "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
       "floppy_files": [
         "./scripts/cygwin-setup.sh",
-        "./scripts/ssh-setup.ssh"
+        "./scripts/ssh-setup.ss"
       ],
       "vboxmanage": [
         [

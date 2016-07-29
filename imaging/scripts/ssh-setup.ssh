@@ -4,29 +4,30 @@
 mkdir -p /home/Vagrant/.ssh
 wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O /home/Vagrant/.ssh/authorized_keys
 
-# These are things you don't usually need todo with Cygwin due to its integration with the Windows account database
-# 1. Create a /etc/passwd file ( use the -l option to grab the user information from the local machine )
+# Create a /etc/passwd file ( use the -l option to grab the user information from the local machine )
 mkpasswd -l > /etc/passwd
 
-# 2. Create a local /etc/group file
+# Create a local /etc/group file
 mkgroup -l > /etc/group
 
 # Setup sshd host config
 # Note --yes runs the install headless using defaults
 # https://cygwin.com/ml/cygwin/2004-11/msg01117/ssh-host-config
+echo "Configuring sshd ..." >&2
 ssh-host-config --yes \
         -w "FooBarBaz"
 
-# Override sshd defaults as required:
-# TODO
-
 # Setup ssh directory permissions
+# This allows us to use sshd in strict mode
+echo "Setting up ssh directory permissions ..." >&2
 chmod 700 /home/Vagrant/.ssh        # drwx------
 chmod 600 /home/Vagrant/*           # -rw-r--r--
 chmod 644 /home/Vagrant/.ssh/*.pub  # -rw-------
 
 # Configure Windows firewall
-
+echo "Setting up Windows firewall for sshd" >&2
+# TODO
 
 # Start the sshd service
+echo "Firing up the sshd service" >&2
 cygrunsrv --start sshd
